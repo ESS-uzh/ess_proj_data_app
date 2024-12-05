@@ -18,3 +18,8 @@
         background: transparent !important;
     }
 }
+
+/*to avoid the black background belo the map*/
+iframe[title="streamlit_folium.st_folium"] {
+    height: 500px;
+}
