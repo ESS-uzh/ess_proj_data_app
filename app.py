@@ -8,7 +8,7 @@ import base64
 
 LOGOS_DIR = "logos_resized"
 CSS_FILE = "static/styles.css"
-DATA_FILE = "data/ess_proj_data_loc_02.json"
+DATA_FILE = "ess_proj_data_loc_02.json"
 
 
 # Utility Functions
@@ -34,11 +34,11 @@ def read_json_file(json_file):
     return data["locations"]
 
 
-def create_map(locations):
-    map_center = [30.079227, -21.750656]
+def create_map(locations, center=None, zoom=1):
+    map_center = center if center else [30.079227, -21.750656]
     folium_map = folium.Map(
         location=map_center,
-        zoom_start=1,
+        zoom_start=zoom,
         tiles="OpenStreetMap",
         width="100%",
         height="100%",
@@ -52,54 +52,70 @@ def create_map(locations):
     return folium_map
 
 
-def display_details(location):
+def display_project_details_below_map(location):
+    """Display selected project details below the map."""
     if location:
-        st.sidebar.markdown(f"### {location['project']}")
-        st.sidebar.markdown("#### Participants")
-        for participant in location["participants"]:
-            st.sidebar.markdown(f"- {participant}")
-        st.sidebar.markdown("#### DOI Links")
+        st.markdown("---")
+        st.markdown(f"### {location['project']}")
+        st.markdown(f"**Participants:**")
+        st.markdown(", ".join(location["participants"]))
+        st.markdown(f"**Description:** {location['description']}")
         if location["doi_data"]:
-            st.sidebar.markdown(f"[DOI Data]({location['doi_data']})")
+            st.markdown(f"[DOI Data]({location['doi_data']})")
         if location["doi_pub"]:
-            st.sidebar.markdown(f"[DOI Publication]({location['doi_pub']})")
-        st.sidebar.markdown("#### Funding")
+            st.markdown(f"[DOI Publication]({location['doi_pub']})")
+        if location["website"]:
+            st.markdown(f"[More info]({location['website']})")
+
+        st.markdown("**Funding Organizations:**")
         for logo in location["logos"]:
             logo_path = os.path.join(LOGOS_DIR, logo)
             resized_logo = resize_image(logo_path, width=110, height=80)
-            st.sidebar.image(resized_logo)
-
-        st.sidebar.markdown("#### Tags")
+            st.image(resized_logo, use_container_width=False)
+        st.markdown("**Tags:**")
         tags_html = " ".join(
             f"<span class='tag'>{tag}</span>" for tag in location["tags"]
         )
-        st.sidebar.markdown(tags_html, unsafe_allow_html=True)
+        st.markdown(tags_html, unsafe_allow_html=True)
 
-        st.sidebar.write("---")
+        st.markdown("---")
 
-        st.markdown(
-            f"""
-        <div style="font-family: 'Courier New', monospace; color: black; font-size: 42px; font-weight:bold;">
-            {location['project']}:
-        </div>
-        """,
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            f"""
-        <div style="font-family: 'Courier New', monospace; color: black; font-size: 20px;font-weight:bold; ">
-            {location["description"]}
-        </div>
-        """,
-            unsafe_allow_html=True,
-        )
-        if location["website"]:
-            st.page_link(location["website"], label="More info", icon=":material/info:")
 
-        # st.markdown(f"## {location['project']}")
-        # st.markdown(f"### {location['description']}")
-        # if location["website"]:
-        #    st.markdown(f"[More info]({location['website']})")
+def display_research_topics():
+    # Topics Section
+    st.markdown("## Main Research Topics")
+    col1, col2, col3, col4 = st.columns(4)
+    topics = [
+        {
+            "name": "Biodiversity",
+            "image": "logos_resized/biodiv_background",
+            "url": "https://example.com/biodiversity",
+        },
+        {
+            "name": "Climate Change",
+            "image": "logos_resized/bridge",
+            "url": "https://example.com/climate",
+        },
+        {
+            "name": "Ecosystem Services",
+            "image": "logos_resized/EU",
+            "url": "https://example.com/ecosystem",
+        },
+        {
+            "name": "Sustainable Development",
+            "image": "logos_resized/EY",
+            "url": "https://example.com/sustainable",
+        },
+    ]
+
+    for i, topic in enumerate(topics):
+        with [col1, col2, col3, col4][i]:
+            st.image(topic["image"], use_container_width=True)
+            if st.button(f"Learn more about {topic['name']}"):
+                st.markdown(
+                    f"[Learn more about {topic['name']}]({topic['url']})",
+                    unsafe_allow_html=True,
+                )
 
 
 def handle_map_click(output, locations):
@@ -115,62 +131,98 @@ def handle_map_click(output, locations):
     return None
 
 
-def create_project_list(global_locations):
-    st.markdown("### Global Projects")
-    project_names = [loc["project"] for loc in global_locations]
-    selected_project = st.radio(
-        "Select a global project",
-        project_names,
-        index=0,
-        label_visibility="collapsed",
-    )
-    for loc in global_locations:
-        if loc["project"] == selected_project:
-            return loc
-    return None
+def filter_projects(locations, query):
+    """Filter projects based on a search query."""
+    query = query.lower()
+    return [
+        loc
+        for loc in locations
+        if query in loc["project"].lower()
+        or query in loc["description"].lower()
+        or query in " ".join(loc["tags"]).lower()
+        or query in loc["location"].lower()
+        or any(query in participant.lower() for participant in loc["participants"])
+    ]
+
+
+def display_project_list(filtered_locations):
+    """Display a list of projects in the sidebar."""
+    st.sidebar.markdown("### Search Results")
+    selected = None
+    if filtered_locations:
+        for loc in filtered_locations:
+            if st.sidebar.button(loc["project"], key=f"sidebar-{loc['project']}"):
+                selected = loc
+    else:
+        st.sidebar.write("No matching projects found.")
+    return selected
 
 
 # Main Application
 def main():
-    st.cache_resource.clear()
+    print("start")
+    # st.cache_resource.clear()
     # Use the encoded image in CSS
     background_image_css = f"""
-    <style>
-    .stApp {{
+     <style>
+     .stApp {{
         background: url('{get_base64_image("logos/biodiv_background.jpeg")}') no-repeat center center fixed;
         background-size: cover;
-    }}
-    .stMainBlockContainer {{
+     }}
+     .stMainBlockContainer {{
         overflow: visible !important; /* Ensure content fits without clipping */
         height: auto !important;     /* Adjust to the content height */
-    }}
-    .leaflet-container {{
+     }}
+     .leaflet-container {{
         background: transparent !important; /* Fix map background */
-    }}
-    </style>
-    """
+     }}
+     </style>
+     """
 
     locations = read_json_file(DATA_FILE)
-    # Streamlit App Layout
+
+    ## Streamlit App Layout
     st.markdown(background_image_css, unsafe_allow_html=True)
-    title = '<p style="font-family:sans-serif; color:Black; font-size: 42px; font-weight:bold;">ESS Projects and Data Map</p>'
+    title = '<p style="font-family:sans-serif; color:Black; font-size: 42px; font-weight:bold;">Earth System Science (ESS)</p>'
     st.markdown(title, unsafe_allow_html=True)
 
     load_css(CSS_FILE)
-    global_locations = [loc for loc in locations if loc["location"] == "global"]
-    local_locations = [loc for loc in locations if loc["location"] != "global"]
-    folium_map = create_map(local_locations)
+    display_research_topics()
+
+    ## Sidebar search functionality
+    st.sidebar.markdown("## Filter Projects")
+    search_query = st.sidebar.text_input("Use keywords:")
+    filtered_locations = (
+        filter_projects(locations, search_query) if search_query else locations
+    )
+    selected_project = display_project_list(filtered_locations)
+
+    # Manage selected project with session state
+    if "selected_project" not in st.session_state:
+        st.session_state["selected_project"] = None
+
+    if selected_project:
+        st.session_state["selected_project"] = selected_project
+    selected_project = st.session_state["selected_project"]
+
+    # Determine map center and zoom based on selection
+    if selected_project:
+        map_center = [selected_project["lat"], selected_project["lon"]]
+        map_zoom = 10
+    else:
+        map_center = [30.079227, -21.750656]  # Default center
+        map_zoom = 1
+
+    # Create and display the map
+    folium_map = create_map(locations, center=map_center, zoom=map_zoom)
     output = st_folium(folium_map, width=800, height=600)
-    clicked_location = handle_map_click(output, local_locations)
-    if clicked_location:
-        display_details(clicked_location)
-    st.markdown("---")
-    col1, col2 = st.columns([1, 2])
-    with col1:
-        st.image("logos/globe.png", use_container_width=True)
-    with col2:
-        selected_location = create_project_list(global_locations)
-    display_details(selected_location)
+
+    # Display project details below the map (if a project is selected)
+    if selected_project:
+        display_project_details_below_map(selected_project)
+
+    print("end")
+    print("---")
 
 
 if __name__ == "__main__":
