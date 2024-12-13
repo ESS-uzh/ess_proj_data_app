@@ -83,39 +83,43 @@ def display_project_details_below_map(location):
 
 def display_research_topics():
     # Topics Section
+    st.markdown("---")
     st.markdown("## Main Research Topics")
     col1, col2, col3, col4 = st.columns(4)
     topics = [
         {
             "name": "Biodiversity",
-            "image": "logos_resized/biodiv_background",
+            "image": "topics_resized/DIZH",
             "url": "https://example.com/biodiversity",
         },
         {
             "name": "Climate Change",
-            "image": "logos_resized/bridge",
+            "image": "topics_resized/bridge",
             "url": "https://example.com/climate",
         },
         {
             "name": "Ecosystem Services",
-            "image": "logos_resized/EU",
+            "image": "topics_resized/EU",
             "url": "https://example.com/ecosystem",
         },
         {
-            "name": "Sustainable Development",
-            "image": "logos_resized/EY",
+            "name": "Sustainable Dev.",
+            "image": "topics_resized/esa",
             "url": "https://example.com/sustainable",
         },
     ]
 
     for i, topic in enumerate(topics):
         with [col1, col2, col3, col4][i]:
-            st.image(topic["image"], use_container_width=True)
+            resized_logo = resize_image(topic["image"], width=150, height=130)
+            st.image(resized_logo, use_container_width=True)
             if st.button(f"Learn more about {topic['name']}"):
                 st.markdown(
                     f"[Learn more about {topic['name']}]({topic['url']})",
                     unsafe_allow_html=True,
                 )
+
+    st.markdown("---")
 
 
 def handle_map_click(output, locations):
@@ -183,7 +187,7 @@ def main():
 
     ## Streamlit App Layout
     st.markdown(background_image_css, unsafe_allow_html=True)
-    title = '<p style="font-family:sans-serif; color:Black; font-size: 42px; font-weight:bold;">Earth System Science (ESS)</p>'
+    title = '<p style="font-family:sans-serif; color:Black; font-size: 42px; font-weight:bold;">Earth System Science</p>'
     st.markdown(title, unsafe_allow_html=True)
 
     load_css(CSS_FILE)
