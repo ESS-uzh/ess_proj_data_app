@@ -71,7 +71,7 @@ def display_project_details_below_map(location):
         for logo in location["logos"]:
             logo_path = os.path.join(LOGOS_DIR, logo)
             resized_logo = resize_image(logo_path, width=110, height=80)
-            st.image(resized_logo, use_container_width=False)
+            st.image(resized_logo)
         st.markdown("**Tags:**")
         tags_html = " ".join(
             f"<span class='tag'>{tag}</span>" for tag in location["tags"]
@@ -89,22 +89,22 @@ def display_research_topics():
     topics = [
         {
             "name": "Biodiversity",
-            "image": "topics_resized/DIZH",
+            "image": "topics_resized/biodiversity_img.jpg",
             "url": "https://example.com/biodiversity",
         },
         {
             "name": "Climate Change",
-            "image": "topics_resized/bridge",
+            "image": "topics_resized/climate_change_img.png",
             "url": "https://example.com/climate",
         },
         {
             "name": "Ecosystem Services",
-            "image": "topics_resized/EU",
+            "image": "topics_resized/ecosystem_services_img.jpg",
             "url": "https://example.com/ecosystem",
         },
         {
             "name": "Sustainable Dev.",
-            "image": "topics_resized/esa",
+            "image": "topics_resized/sus_dev_img.png",
             "url": "https://example.com/sustainable",
         },
     ]
@@ -112,7 +112,7 @@ def display_research_topics():
     for i, topic in enumerate(topics):
         with [col1, col2, col3, col4][i]:
             resized_logo = resize_image(topic["image"], width=150, height=130)
-            st.image(resized_logo, use_container_width=True)
+            st.image(resized_logo)
             if st.button(f"Learn more about {topic['name']}"):
                 st.markdown(
                     f"[Learn more about {topic['name']}]({topic['url']})",
