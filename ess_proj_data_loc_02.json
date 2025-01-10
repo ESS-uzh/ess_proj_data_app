@@ -11,9 +11,18 @@
             "lat": 47.119485,
             "lon": 7.156640,
             "logos": [
-                "Horizon2020",
-                "FNSNF",
-                "EU"
+                [
+                    "Horizon2020",
+                    "Horizon 2020"
+                ],
+                [
+                    "FNSNF",
+                    ""
+                ],
+                [
+                    "EU",
+                    "European Union"
+                ]
             ],
             "doi_data": "",
             "doi_pub": "",
@@ -32,7 +41,10 @@
             "lat": 47.377964,
             "lon": 8.551129,
             "logos": [
-                "DIZH"
+                [
+                    "DIZH",
+                    "Digitalization Initiative of the Zurich Higher Education Institutions"
+                ]
             ],
             "doi_data": "https://sustainability.discourses.ch/en/",
             "doi_pub": "https://sustainability.discourses.ch/en/",
@@ -51,7 +63,10 @@
             "lat": 46.873899,
             "lon": 8.366292,
             "logos": [
-                "esa"
+                [
+                    "esa",
+                    "European Space Agency"
+                ]
             ],
             "doi_data": "https://en.wikipedia.org/wiki/Earth",
             "doi_pub": "https://en.wikipedia.org/wiki/Earth",
@@ -71,10 +86,22 @@
             "lat": 47.214344,
             "lon": 9.340093,
             "logos": [
-                "WWF",
-                "Swiss-Re",
-                "AXA",
-                "EY"
+                [
+                    "WWF",
+                    "World Wildlife Fund"
+                ],
+                [
+                    "Swiss-Re",
+                    "Swiss-Re"
+                ],
+                [
+                    "AXA",
+                    "Insurance and pension provisioning in Switzerland"
+                ],
+                [
+                    "EY",
+                    "Ernst & Yung"
+                ]
             ],
             "doi_data": "",
             "doi_pub": "",
