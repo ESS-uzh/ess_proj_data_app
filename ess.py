@@ -37,7 +37,7 @@ TOPIC_INFO = {
 
 
 def home_page():
-    title = '<p style="font-family:sans-serif; color:Black; font-size: 42px; font-weight:bold;">Earth System Science</p>'
+    title = '<p style="font-family:sans-serif; color:White; font-size: 42px; font-weight:bold;">Earth System Science</p>'
     st.markdown(title, unsafe_allow_html=True)
     # Topics Section
     st.markdown("---")
@@ -49,7 +49,7 @@ def home_page():
         with cols[idx]:
             resized_image = resize_image(info["image"], width=150, height=130)
             st.image(resized_image)
-            st.markdown(f"{topic}")
+            st.markdown(f"**{topic}**")
             # if st.button(f"Explore {topic}", key=f"button_{topic}"):
             #    st.markdown(f"[Explore {topic}]({info['page']})", unsafe_allow_html=True)
 

@@ -5,6 +5,7 @@ from utils import read_json_file, create_map, load_css
 DATA_FILE = "ess_proj_data_loc_02.json"
 CSS_FILE = "static/styles.css"
 
+
 def biodiversity_page():
     load_css(CSS_FILE)
     st.title("Biodiversity")
@@ -23,8 +24,9 @@ def biodiversity_page():
     st_folium(folium_map, width=800, height=600)
 
     # Back to Main Page
-    if st.button("Back to Main Page"):
-        st.markdown("[Main Page](main)", unsafe_allow_html=True)
+    # if st.button("Back to Main Page"):
+    #    st.markdown("[Main Page](main)", unsafe_allow_html=True)
+
 
 if __name__ == "__main__":
     biodiversity_page()
