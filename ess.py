@@ -3,7 +3,7 @@ from streamlit_folium import st_folium
 from utils import (
     load_css,
     resize_image,
-    get_base64_image,
+    get_available_keywords,
     read_json_file,
     create_map,
     display_project_details_below_map,
@@ -55,15 +55,45 @@ def home_page():
 
     st.markdown("---")
 
-    locations = read_json_file(DATA_FILE)
+    projects = read_json_file(DATA_FILE)
+
+    # Clear Filters Button
+    if st.sidebar.button("Clear Filters"):
+        st.session_state["selected_project"] = None
+        st.session_state["search_query"] = ""  # Reset search query
+        filtered_projects = projects
+    else:
+        # Maintain filtered locations if not resetting
+        filtered_projects = (
+            projects
+            if "filtered_projects" not in st.session_state
+            else st.session_state["filtered_projects"]
+        )
 
     ## Sidebar search functionality
     st.sidebar.markdown("## Filter Projects")
-    search_query = st.sidebar.text_input("Use keywords:")
-    filtered_locations = (
-        filter_projects(locations, search_query) if search_query else locations
+    category = st.sidebar.selectbox(
+        "Select a category to filter by:",
+        ["Tags", "Location", "Participants"],
     )
-    selected_project = display_project_list(filtered_locations)
+
+    # Display available keywords for the selected category
+    available_keywords = get_available_keywords(projects, category)
+    if available_keywords:
+        selected_keyword = st.sidebar.selectbox(
+            f"Available {category.lower()}:", available_keywords
+        )
+    else:
+        st.sidebar.write(f"No available {category.lower()} found.")
+        selected_keyword = None
+
+    # Perform filtering based on the selected category and keyword
+    if selected_keyword:
+        filtered_projects = filter_projects(projects, category, selected_keyword)
+    else:
+        filtered_projects = projects
+
+    selected_project = display_project_list(filtered_projects)
 
     # Manage selected project with session state
     if "selected_project" not in st.session_state:
@@ -82,7 +112,7 @@ def home_page():
         map_zoom = 2
 
     # Create and display the map
-    folium_map = create_map(locations, center=map_center, zoom=map_zoom)
+    folium_map = create_map(projects, center=map_center, zoom=map_zoom)
     output = st_folium(folium_map, width=800, height=600)
 
     # Display project details below the map (if a project is selected)

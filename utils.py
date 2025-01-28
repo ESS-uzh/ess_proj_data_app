@@ -25,7 +25,7 @@ def get_base64_image(image_path):
 def read_json_file(json_file):
     with open(json_file, "r") as file:
         data = json.load(file)
-    return data["locations"]
+    return data["projects"]
 
 
 def create_map(locations, center=None, zoom=1):
@@ -94,39 +94,45 @@ def display_project_details_below_map(location, logos_dir):
         st.markdown("---")
 
 
-def handle_map_click(output, locations):
-    if output["last_object_clicked"]:
-        clicked_lat = round(output["last_object_clicked"]["lat"], 4)
-        clicked_lon = round(output["last_object_clicked"]["lng"], 4)
-        for loc in locations:
-            if (
-                round(loc["lat"], 4) == clicked_lat
-                and round(loc["lon"], 4) == clicked_lon
-            ):
-                return loc
-    return None
-
-
-def filter_projects(locations, query):
-    """Filter projects based on a search query."""
+def filter_projects(projects, category, query):
+    """Filter projects based on selected category and query."""
     query = query.lower()
-    return [
-        loc
-        for loc in locations
-        if query in loc["project"].lower()
-        or query in loc["description"].lower()
-        or query in " ".join(loc["tags"]).lower()
-        or query in loc["location"].lower()
-        or any(query in participant.lower() for participant in loc["participants"])
-    ]
+    if category == "Tags":
+        return [loc for loc in projects if query in " ".join(loc["tags"]).lower()]
+    elif category == "Location":
+        return [loc for loc in projects if query in loc["location"].lower()]
+    elif category == "Participants":
+        return [
+            loc
+            for loc in projects
+            if any(query in participant.lower() for participant in loc["participants"])
+        ]
+    elif category == "Project Name":
+        return [loc for loc in projects if query in loc["project"].lower()]
+    return projects
 
 
-def display_project_list(filtered_locations):
+def get_available_keywords(projects, category):
+    """Retrieve unique keywords for the selected category."""
+    if category == "Tags":
+        keywords = {tag for loc in projects for tag in loc["tags"]}
+    elif category == "Location":
+        keywords = {loc["location"] for loc in projects}
+    elif category == "Participants":
+        keywords = {
+            participant for loc in projects for participant in loc["participants"]
+        }
+    else:
+        keywords = set()
+    return sorted(keywords)  # Sort for a cleaner display
+
+
+def display_project_list(filtered_projects):
     """Display a list of projects in the sidebar."""
     st.sidebar.markdown("### Search Results")
     selected = None
-    if filtered_locations:
-        for loc in filtered_locations:
+    if filtered_projects:
+        for loc in filtered_projects:
             if st.sidebar.button(loc["project"], key=f"sidebar-{loc['project']}"):
                 selected = loc
     else:
