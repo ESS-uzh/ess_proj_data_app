@@ -30,7 +30,8 @@
             "doi_data": "",
             "doi_pub": "",
             "tags": [
-                "fire"
+                "fire",
+                "all"
             ]
         },
         {
@@ -53,7 +54,8 @@
             "doi_data": "https://sustainability.discourses.ch/en/",
             "doi_pub": "https://sustainability.discourses.ch/en/",
             "tags": [
-                "fire"
+                "fire",
+                "all"
             ]
         },
         {
@@ -77,7 +79,8 @@
             "doi_pub": "https://en.wikipedia.org/wiki/Earth",
             "tags": [
                 "fire",
-                "water"
+                "water",
+                "all"
             ]
         },
         {
@@ -112,7 +115,66 @@
             "doi_data": "",
             "doi_pub": "",
             "tags": [
-                "fire"
+                "fire",
+                "all"
+            ]
+        },
+        {
+            "project": "Agroforestry for food security",
+            "location": "Kerela, India",
+            "description": "Description project here",
+            "website": "https://www.swissre.com/institute/partnerships/modelling-biodiversity-ecosystem-boost-resilience.html",
+            "participants": [
+                "Mary Ann George",
+                "Prof. Maria J. Santos"
+            ],
+            "lat": 47.214344,
+            "lon": 9.340093,
+            "logos": [
+                [
+                    "URPP",
+                    "URPP Global Change and Biodiversity"
+                ]
+            ],
+            "doi_data": "",
+            "doi_pub": "",
+            "tags": [
+                "biodiversity",
+                "food security",
+                "all"
+            ]
+        },
+        {
+            "project": "Impacts of drought on ecosystem resilience, biodiversity and functioning in the Mediterranean Basin",
+            "location": "Mediterranean Basin",
+            "description": "Description project here",
+            "website": "https://www.swissre.com/institute/partnerships/modelling-biodiversity-ecosystem-boost-resilience.html",
+            "participants": [
+                "Matilde Torrassa",
+                "Prof. Maria J. Santos"
+            ],
+            "lat": 47.214344,
+            "lon": 9.340093,
+            "logos": [
+                [
+                    "pnrr",
+                    "Piano Nazionale di Ripresa and Resilienza"
+                ],
+                [
+                    "CIMA",
+                    "CIMA research foundation"
+                ],
+                [
+                    "UNIGEN",
+                    "University of Genova"
+                ]
+            ],
+            "doi_data": "",
+            "doi_pub": "",
+            "tags": [
+                "biodiversity",
+                "food security",
+                "all"
             ]
         }
     ]

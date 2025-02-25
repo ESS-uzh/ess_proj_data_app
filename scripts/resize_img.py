@@ -3,8 +3,8 @@ import os
 from glob import glob
 
 
-INPUT_PATH = "/home/diego/work/projects/ess_proj_data_map/test"
-OUTPUT_PATH = "../topics_resized"
+INPUT_PATH = "/home/diego/work/dev/github/ess_proj_data_app/logos"
+OUTPUT_PATH = "../logos_resized"
 
 
 # Function to downsize an image

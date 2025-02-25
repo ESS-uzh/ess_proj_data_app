@@ -37,8 +37,15 @@ TOPIC_INFO = {
 
 
 def home_page():
-    title = '<p style="font-family:sans-serif; color:White; font-size: 42px; font-weight:bold;">Earth System Science</p>'
-    st.markdown(title, unsafe_allow_html=True)
+    # Title and logo
+    col1, col2 = st.columns([6, 1])
+    with col1:
+        st.markdown(
+            '<p style="font-family:sans-serif; color:White; font-size: 42px; font-weight:bold;">Earth System Science</p>',
+            unsafe_allow_html=True,
+        )
+    with col2:
+        st.image("/home/diego/work/dev/github/ess_proj_data_app/logos/UZH.jpg")
     # Topics Section
     st.markdown("---")
     st.markdown("## Main Research Topics")
@@ -124,6 +131,7 @@ def home_page():
 
 # Main Application
 def main():
+    st.set_page_config(page_title="ESS App", page_icon="🌍")
     print("start")
     load_css(CSS_FILE)
     # Ensure "current_page" exists in session state

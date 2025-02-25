@@ -52,13 +52,7 @@ def display_project_details_below_map(location, logos_dir):
 
         st.markdown("---")
         st.markdown(f"### {location['project']}")
-        st.markdown(f"**Participants:**")
-        st.markdown(", ".join(location["participants"]))
-
-        # Add extra space between sections
-        st.markdown("&nbsp;", unsafe_allow_html=True)
-
-        st.markdown(f"**Description:** {location['description']}")
+        st.markdown(location["description"])
         if location["doi_data"]:
             st.markdown(f"[DOI Data]({location['doi_data']})")
         if location["doi_pub"]:
@@ -69,7 +63,19 @@ def display_project_details_below_map(location, logos_dir):
         # Add extra space between sections
         st.markdown("&nbsp;", unsafe_allow_html=True)
 
-        st.markdown("**Funding Organizations:**")
+        st.markdown(
+            '<p style="font-family:sans-serif; color:White; font-size: 16px; font-weight:bold;">Participants:</p>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(", ".join(location["participants"]))
+
+        # Add extra space between sections
+        st.markdown("&nbsp;", unsafe_allow_html=True)
+
+        st.markdown(
+            '<p style="font-family:sans-serif; color:White; font-size: 16px; font-weight:bold;">Funding Organizations:</p>',
+            unsafe_allow_html=True,
+        )
         for logo in location["logos"]:
             logo_name, logo_description = logo
             logo_path = os.path.join(logos_dir, logo_name)
@@ -85,7 +91,10 @@ def display_project_details_below_map(location, logos_dir):
         # Add extra space between sections
         st.markdown("&nbsp;", unsafe_allow_html=True)
 
-        st.markdown("**Tags:**")
+        st.markdown(
+            '<p style="font-family:sans-serif; color:White; font-size: 16px; font-weight:bold;">Tags:</p>',
+            unsafe_allow_html=True,
+        )
         tags_html = " ".join(
             f"<span class='tag'>{tag}</span>" for tag in location["tags"]
         )
