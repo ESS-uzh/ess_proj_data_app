@@ -114,8 +114,12 @@ def home_page():
 
     # Determine map center and zoom based on selection
     if selected_project:
-        map_center = [selected_project["lat"], selected_project["lon"]]
-        map_zoom = 10
+        if selected_project["lat"] and selected_project["lon"]:
+            map_center = [selected_project["lat"], selected_project["lon"]]
+            map_zoom = 5
+        else:
+            map_center = None
+            map_zoom = 2
     else:
         map_center = [30.079227, -21.750656]  # Default center
         map_zoom = 2

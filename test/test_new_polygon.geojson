@@ -1,0 +1,37 @@
+{
+    "type": "FeatureCollection",
+    "crs": {
+        "type": "name",
+        "properties": {
+            "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+        }
+    },
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "ST_NM": "Kerala",
+                "orig_ogc_f": 15,
+                "centroid": [
+                    12.790017025865097,
+                    74.99790588180105
+                ]
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            12.79226798218167,
+                            74.99575065337001
+                        ],
+                        [
+                            12.787766069548525,
+                            75.00006111023208
+                        ]
+                    ]
+                ]
+            }
+        }
+    ]
+}

@@ -22,10 +22,14 @@ def get_base64_image(image_path):
     return f"data:image/png;base64,{encoded}"
 
 
-def read_json_file(json_file):
+def read_json(json_file):
     with open(json_file, "r") as file:
         data = json.load(file)
-    return data["projects"]
+    return data
+
+
+def read_json_file(json_file):
+    return read_json(json_file)["projects"]
 
 
 def create_map(locations, center=None, zoom=1):
@@ -38,11 +42,25 @@ def create_map(locations, center=None, zoom=1):
         height="100%",
     )
     for loc in locations:
-        folium.Marker(
-            location=[loc["lat"], loc["lon"]],
-            tooltip=loc["project"],
-            icon=folium.Icon(color="blue", icon="info-sign"),
-        ).add_to(folium_map)
+        if "polygon" in loc and loc["polygon"]:
+            # Load the geojson file
+            data = read_json(f"polygons/{loc['polygon']}")
+            polygon = data["features"][0]["geometry"]["coordinates"]
+            # Add a Polygon
+            folium.Polygon(
+                locations=polygon,  # List of [lat, lon] pairs
+                color="blue",
+                fill=True,
+                fill_color="cyan",
+                fill_opacity=0.4,
+                tooltip=loc["project"],  # Tooltip on hover
+            ).add_to(folium_map)
+        elif loc["lat"] and loc["lon"]:
+            folium.Marker(
+                location=[loc["lat"], loc["lon"]],
+                tooltip=loc["project"],
+                icon=folium.Icon(color="blue", icon="info-sign"),
+            ).add_to(folium_map)
     return folium_map
 
 

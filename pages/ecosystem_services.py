@@ -22,11 +22,6 @@ def ecosystem_services_page():
     folium_map = create_map(topic_projects, center=map_center, zoom=2)
     st_folium(folium_map, width=800, height=600)
 
-    # Back to Main Page
-    # if st.button("Back to Main Page"):
-    #    st.markdown("[Main Page](main)", unsafe_allow_html=True)
-    print(st.session_state["current_page"])
-
 
 if __name__ == "__main__":
     ecosystem_services_page()
