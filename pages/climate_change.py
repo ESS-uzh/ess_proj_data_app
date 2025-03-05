@@ -1,6 +1,11 @@
 import streamlit as st
 from streamlit_folium import st_folium
-from utils import read_json_file, create_map, load_css
+from utils import (
+    read_json_file,
+    create_map,
+    load_css,
+    display_side_bar_and_map,
+)
 
 DATA_FILE = "ess_proj_data_loc_02.json"
 CSS_FILE = "static/styles.css"
@@ -21,12 +26,18 @@ Scientists use observations from the ground, air, and space, along with computer
 
     # Load and Filter Data
     projects = read_json_file(DATA_FILE)
-    topic_projects = [loc for loc in projects if "climate change" in loc["tags"]]
+    projects_climate_change = [
+        loc for loc in projects if "climate change" in loc["tags"]
+    ]
 
-    # Map
-    map_center = [30.079227, -21.750656]  # Default center
-    folium_map = create_map(topic_projects, center=map_center, zoom=2)
-    st_folium(folium_map, width=800, height=600)
+    # reset filters
+    if st.session_state["selected_project"] not in projects_climate_change:
+        st.session_state["selected_project"] = None
+        st.session_state["search_query"] = ""  # Reset search query
+
+    display_side_bar_and_map(
+        projects_climate_change, categories=["Location", "Participants"]
+    )
 
 
 if __name__ == "__main__":

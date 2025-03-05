@@ -1,6 +1,13 @@
 import streamlit as st
 from streamlit_folium import st_folium
-from utils import read_json_file, create_map, load_css
+
+# from utils import read_json_file, create_map, load_css
+from utils import (
+    load_css,
+    resize_image,
+    read_json_file,
+    display_side_bar_and_map,
+)
 
 DATA_FILE = "ess_proj_data_loc_02.json"
 CSS_FILE = "static/styles.css"
@@ -15,17 +22,17 @@ def biodiversity_page():
     )
 
     # Load and Filter Data
-    locations = read_json_file(DATA_FILE)
-    topic_locations = [loc for loc in locations if "biodiversity" in loc["tags"]]
+    projects = read_json_file(DATA_FILE)
+    projects_biodiversity = [loc for loc in projects if "biodiversity" in loc["tags"]]
 
-    # Map
-    map_center = [30.079227, -21.750656]  # Default center
-    folium_map = create_map(topic_locations, center=map_center, zoom=2)
-    st_folium(folium_map, width=800, height=600)
+    if st.session_state["selected_project"] not in projects_biodiversity:
+        st.session_state["selected_project"] = None
+        st.session_state["search_query"] = ""  # Reset search query
 
-    # Back to Main Page
-    # if st.button("Back to Main Page"):
-    #    st.markdown("[Main Page](main)", unsafe_allow_html=True)
+    display_side_bar_and_map(
+        projects_biodiversity, categories=["Location", "Participants"]
+    )
+
     print(st.session_state["current_page"])
 
 

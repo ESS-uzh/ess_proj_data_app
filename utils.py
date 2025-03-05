@@ -4,6 +4,9 @@ import base64
 from PIL import Image
 import streamlit as st
 import folium
+from streamlit_folium import st_folium
+
+LOGOS_DIR = "logos_resized"
 
 
 def load_css(css_file):
@@ -127,7 +130,11 @@ def filter_projects(projects, category, query):
     if category == "Tags":
         return [loc for loc in projects if query in " ".join(loc["tags"]).lower()]
     elif category == "Location":
-        return [loc for loc in projects if query in loc["location"].lower()]
+        return [
+            prj
+            for prj in projects
+            if any(query in location.lower() for location in prj["location"])
+        ]
     elif category == "Participants":
         return [
             loc
@@ -144,14 +151,14 @@ def get_available_keywords(projects, category):
     if category == "Tags":
         keywords = {tag for loc in projects for tag in loc["tags"]}
     elif category == "Location":
-        keywords = {loc["location"] for loc in projects}
+        keywords = {loc for prj in projects for loc in prj["location"]}
     elif category == "Participants":
         keywords = {
             participant for loc in projects for participant in loc["participants"]
         }
     else:
         keywords = set()
-    return sorted(keywords)  # Sort for a cleaner display
+    return sorted(keywords, key=str.lower)  # Sort for a cleaner display
 
 
 def display_project_list(filtered_projects):
@@ -165,3 +172,71 @@ def display_project_list(filtered_projects):
     else:
         st.sidebar.write("No matching projects found.")
     return selected
+
+
+def display_side_bar_and_map(projects, categories=["Tags", "Location", "Participants"]):
+    # Clear Filters Button
+    if st.sidebar.button("Clear Filters"):
+        st.session_state["selected_project"] = None
+        st.session_state["search_query"] = ""  # Reset search query
+        filtered_projects = projects
+    else:
+        # Maintain filtered locations if not resetting
+        filtered_projects = (
+            projects
+            if "filtered_projects" not in st.session_state
+            else st.session_state["filtered_projects"]
+        )
+
+    ## Sidebar search functionality
+    st.sidebar.markdown("## Filter Projects")
+    category = st.sidebar.selectbox(
+        "Select a category to filter by:",
+        categories,
+    )
+
+    # Display available keywords for the selected category
+    available_keywords = get_available_keywords(projects, category)
+    if available_keywords:
+        selected_keyword = st.sidebar.selectbox(
+            f"Available {category.lower()}:", available_keywords
+        )
+    else:
+        st.sidebar.write(f"No available {category.lower()} found.")
+        selected_keyword = None
+
+    # Perform filtering based on the selected category and keyword
+    if selected_keyword:
+        filtered_projects = filter_projects(projects, category, selected_keyword)
+    else:
+        filtered_projects = projects
+
+    selected_project = display_project_list(filtered_projects)
+
+    # Manage selected project with session state
+    if "selected_project" not in st.session_state:
+        st.session_state["selected_project"] = None
+
+    if selected_project:
+        st.session_state["selected_project"] = selected_project
+    selected_project = st.session_state["selected_project"]
+
+    # Determine map center and zoom based on selection
+    if selected_project:
+        if selected_project["lat"] and selected_project["lon"]:
+            map_center = [selected_project["lat"], selected_project["lon"]]
+            map_zoom = 5
+        else:
+            map_center = None
+            map_zoom = 2
+    else:
+        map_center = [30.079227, -21.750656]  # Default center
+        map_zoom = 2
+
+    # Create and display the map
+    folium_map = create_map(projects, center=map_center, zoom=map_zoom)
+    output = st_folium(folium_map, width=800, height=600)
+
+    # Display project details below the map (if a project is selected)
+    if selected_project:
+        display_project_details_below_map(selected_project, LOGOS_DIR)

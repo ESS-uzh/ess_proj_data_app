@@ -3,7 +3,10 @@
         {
             "project": "Obsgession",
             "id": 1,
-            "location": "Europe",
+            "location": [
+                "Europe",
+                "all"
+            ],
             "description": "The OBSGESSION project will help address the challenges of declining freshwater and terrestrial biodiversity through a multi-faceted approach aimed at integrating existing methods and technologies for assessing and predicting biodiversity change and its drivers. Its results will be used to help inform efforts like the CBD, IPBES and the European Green Deal and EU Biodiversity Strategy for 2030, and provide state-of-the-art ecological models on biodiversity change on a case study and EU-level.",
             "website": "https://obsgession.eu/about",
             "participants": [
@@ -39,7 +42,10 @@
         {
             "project": "Sustainability Discourses",
             "id": 2,
-            "location": "Europe",
+            "location": [
+                "Europe",
+                "all"
+            ],
             "description": "Understanding and tracking urban sustainability discourses. We develop automated models to analyse urban sustainability discourses based on media data. In particular, we are interested in the rise and fall of different topics, who positions themselves in which way and in the stories that are told about urban sustainability over time. We also look back - how has the discourse around urban sustainability developed over time?",
             "website": "https://sustainability.discourses.ch/en/",
             "participants": [
@@ -64,7 +70,10 @@
         {
             "project": "The Circle Future Earth",
             "id": 3,
-            "location": "global",
+            "location": [
+                "global",
+                "all"
+            ],
             "description": "Where/how do transitions in ecosystems occur? What is the land biosphere response? Literature review to establish the current and future use of earth observation to answer these questions",
             "website": "",
             "participants": [
@@ -90,7 +99,10 @@
         {
             "project": "Modelling biodiversity and ecosystem services loss scenarios",
             "id": 4,
-            "location": "global",
+            "location": [
+                "global",
+                "all"
+            ],
             "description": "Better understanding the impacts of biodiversity loss and ecosystem degradation is important for our society and economy. Healthy ecosystems underpin all the UN SDGs; and our economies and businesses remain dependent on the robustness of natural assets. The BES (Biodiversity and Ecosystem Services) Scenarios Modelling Initiative aims to provide meaningful and quantified BES futures at a highly granular level and agglomerate data to provide globally applicable regional views.",
             "website": "https://www.swissre.com/institute/partnerships/modelling-biodiversity-ecosystem-boost-resilience.html",
             "participants": [
@@ -129,7 +141,10 @@
         {
             "project": "Agroforestry for food security",
             "id": 5,
-            "location": "Kerela, India",
+            "location": [
+                "Kerela, India",
+                "all"
+            ],
             "description": "Description project here",
             "website": "https://www.swissre.com/institute/partnerships/modelling-biodiversity-ecosystem-boost-resilience.html",
             "participants": [
@@ -157,7 +172,10 @@
         {
             "project": "Impacts of drought on ecosystem resilience, biodiversity and functioning in the Mediterranean Basin",
             "id": 6,
-            "location": "Mediterranean Basin",
+            "location": [
+                "Mediterranean Basin",
+                "all"
+            ],
             "description": "Description project here",
             "website": "https://www.swissre.com/institute/partnerships/modelling-biodiversity-ecosystem-boost-resilience.html",
             "participants": [
@@ -191,7 +209,10 @@
         {
             "project": "Fire-vegetation model parametrization using hyperspectral data",
             "id": 7,
-            "location": "Sierra Nevada, California USA",
+            "location": [
+                "Sierra Nevada, California USA",
+                "all"
+            ],
             "description": "Description project here",
             "website": "https://www.swissre.com/institute/partnerships/modelling-biodiversity-ecosystem-boost-resilience.html",
             "participants": [
